@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Glass секундомер задач</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main
+      class="app-shell"
+      aria-label="Современный трекер задач с секундомером"
+    >
+      <section class="phone-panel" aria-label="iPhone glass интерфейс">
+        <div class="dynamic-island" aria-hidden="true"></div>
+
+        <header class="hero-card glass-card">
+          <p class="eyebrow">Ячейка G2</p>
+          <h1>Секундомер выполнения</h1>
+          <output
+            id="stopwatchDisplay"
+            class="stopwatch-display"
+            aria-live="polite"
+            >00:00:00</output
+          >
+
+          <div class="timer-controls" aria-label="Управление секундомером">
+            <button id="startPauseBtn" class="control primary" type="button">
+              Старт
+            </button>
+            <button id="resetBtn" class="control secondary" type="button">
+              Сброс
+            </button>
+          </div>
+
+          <label class="auto-toggle glass-toggle">
+            <input id="autoComplete" type="checkbox" checked />
+            <span class="toggle-visual" aria-hidden="true"></span>
+            <span>
+              <strong>Автоотметка</strong>
+              <small
+                >Ставит галочку, когда секундомер дошёл до времени строки</small
+              >
+            </span>
+          </label>
+        </header>
+
+        <section class="tasks-card glass-card" aria-labelledby="tasksTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Список</p>
+              <h2 id="tasksTitle">Контроль времени</h2>
+            </div>
+            <span id="completedCounter" class="counter">0/11</span>
+          </div>
+
+          <div class="table-head" aria-hidden="true">
+            <span>Статус</span>
+            <span>Время, мин</span>
+          </div>
+
+          <div
+            id="taskList"
+            class="task-list"
+            aria-label="Задачи с порогами времени"
+          ></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
