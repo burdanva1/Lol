@@ -1,21 +1,26 @@
-const taskMinutes = [15, 20, 40, 50, 60, 90, 120, 150, 200, 220, 240];
+const tasks = [15, 20, 40, 50, 60, 90, 120, 150, 200, 220, 240];
 
-const display = document.querySelector('#stopwatchDisplay');
-const startPauseBtn = document.querySelector('#startPauseBtn');
-const resetBtn = document.querySelector('#resetBtn');
-const autoComplete = document.querySelector('#autoComplete');
-const statusCells = [...document.querySelectorAll('.status-cell')];
+const display = document.querySelector("#stopwatchDisplay");
+const startPauseBtn = document.querySelector("#startPauseBtn");
+const resetBtn = document.querySelector("#resetBtn");
+const autoComplete = document.querySelector("#autoComplete");
+const taskList = document.querySelector("#taskList");
+const completedCounter = document.querySelector("#completedCounter");
 
 let elapsedMs = 0;
 let startedAt = 0;
 let frameId = 0;
 let isRunning = false;
+let taskRows = [];
 
 function formatElapsed(milliseconds) {
   const totalSeconds = Math.floor(milliseconds / 1000);
-  const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-  const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-  const seconds = String(totalSeconds % 60).padStart(2, '0');
+  const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+  const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
+    2,
+    "0",
+  );
+  const seconds = String(totalSeconds % 60).padStart(2, "0");
 
   return `${hours}:${minutes}:${seconds}`;
 }
@@ -28,16 +33,21 @@ function getCurrentElapsed() {
   return elapsedMs + Date.now() - startedAt;
 }
 
-function setTaskDone(index, done) {
-  const cell = statusCells[index];
-  const checkbox = cell?.querySelector('input');
+function updateCounter() {
+  const completed = taskRows.filter(({ checkbox }) => checkbox.checked).length;
+  completedCounter.textContent = `${completed}/${tasks.length}`;
+}
 
-  if (!cell || !checkbox) {
+function setTaskDone(index, done) {
+  const task = taskRows[index];
+
+  if (!task) {
     return;
   }
 
-  checkbox.checked = done;
-  cell.classList.toggle('done', done);
+  task.checkbox.checked = done;
+  task.row.classList.toggle("done", done);
+  updateCounter();
 }
 
 function syncAutoCompletedTasks(currentElapsedMs) {
@@ -47,7 +57,7 @@ function syncAutoCompletedTasks(currentElapsedMs) {
 
   const elapsedMinutes = currentElapsedMs / 60000;
 
-  taskMinutes.forEach((minutes, index) => {
+  tasks.forEach((minutes, index) => {
     if (elapsedMinutes >= minutes) {
       setTaskDone(index, true);
     }
@@ -67,8 +77,9 @@ function render() {
 function startStopwatch() {
   isRunning = true;
   startedAt = Date.now();
-  startPauseBtn.textContent = 'Пауза';
-  startPauseBtn.classList.remove('primary');
+  startPauseBtn.textContent = "Пауза";
+  startPauseBtn.classList.remove("primary");
+  startPauseBtn.classList.add("secondary");
   render();
 }
 
@@ -76,8 +87,9 @@ function pauseStopwatch() {
   elapsedMs = getCurrentElapsed();
   isRunning = false;
   cancelAnimationFrame(frameId);
-  startPauseBtn.textContent = 'Старт';
-  startPauseBtn.classList.add('primary');
+  startPauseBtn.textContent = "Старт";
+  startPauseBtn.classList.add("primary");
+  startPauseBtn.classList.remove("secondary");
   render();
 }
 
@@ -92,22 +104,48 @@ function resetStopwatch() {
   render();
 }
 
-function buildCheckboxes() {
-  statusCells.forEach((cell, index) => {
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.className = 'status-checkbox';
-    checkbox.setAttribute('aria-label', `Отметить строку ${index + 2} выполненной`);
+function createTaskRow(minutes, index) {
+  const row = document.createElement("article");
+  row.className = "task-row";
 
-    checkbox.addEventListener('change', () => {
-      cell.classList.toggle('done', checkbox.checked);
-    });
+  const status = document.createElement("label");
+  status.className = "task-status";
 
-    cell.append(checkbox);
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.className = "status-checkbox";
+  checkbox.setAttribute(
+    "aria-label",
+    `Отметить задачу на ${minutes} минут выполненной`,
+  );
+
+  const label = document.createElement("span");
+  label.className = "status-label";
+  label.textContent = `Этап ${index + 1}`;
+
+  const time = document.createElement("span");
+  time.className = "time-pill";
+  time.textContent = minutes;
+  time.setAttribute("aria-label", `${minutes} минут`);
+
+  checkbox.addEventListener("change", () => {
+    row.classList.toggle("done", checkbox.checked);
+    updateCounter();
   });
+
+  status.append(checkbox, label);
+  row.append(status, time);
+  taskList.append(row);
+
+  return { row, checkbox };
 }
 
-startPauseBtn.addEventListener('click', () => {
+function buildTaskList() {
+  taskRows = tasks.map(createTaskRow);
+  updateCounter();
+}
+
+startPauseBtn.addEventListener("click", () => {
   if (isRunning) {
     pauseStopwatch();
   } else {
@@ -115,8 +153,10 @@ startPauseBtn.addEventListener('click', () => {
   }
 });
 
-resetBtn.addEventListener('click', resetStopwatch);
-autoComplete.addEventListener('change', () => syncAutoCompletedTasks(getCurrentElapsed()));
+resetBtn.addEventListener("click", resetStopwatch);
+autoComplete.addEventListener("change", () =>
+  syncAutoCompletedTasks(getCurrentElapsed()),
+);
 
-buildCheckboxes();
+buildTaskList();
 render();

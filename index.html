@@ -3,153 +3,68 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Таблица задач с секундомером</title>
+    <title>Glass секундомер задач</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="app" aria-label="Таблица задач с секундомером">
-      <section class="sheet" aria-label="Электронная таблица">
-        <div class="corner" aria-hidden="true"></div>
-        <div class="col-head">A</div>
-        <div class="col-head">B</div>
-        <div class="col-head">C</div>
-        <div class="col-head">D</div>
-        <div class="col-head">E</div>
-        <div class="col-head">F</div>
-        <div class="col-head selected-col">G</div>
-        <div class="col-head">H</div>
+    <main
+      class="app-shell"
+      aria-label="Современный трекер задач с секундомером"
+    >
+      <section class="phone-panel" aria-label="iPhone glass интерфейс">
+        <div class="dynamic-island" aria-hidden="true"></div>
 
-        <div class="row-head">1</div>
-        <div class="cell table-cell header-cell">статус</div>
-        <div class="cell table-cell header-cell">Время</div>
-        <div class="cell table-cell group-cell header-spacer"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
+        <header class="hero-card glass-card">
+          <p class="eyebrow">Ячейка G2</p>
+          <h1>Секундомер выполнения</h1>
+          <output
+            id="stopwatchDisplay"
+            class="stopwatch-display"
+            aria-live="polite"
+            >00:00:00</output
+          >
 
-        <div class="row-head">2</div>
-        <div class="cell table-cell status-cell" data-task-row="0"></div>
-        <div class="cell table-cell time-cell" data-minutes="15">15</div>
-        <div class="cell table-cell group-cell group-20" rowspan-like="true">20</div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell stopwatch-cell selected-cell" aria-label="Ячейка G2: секундомер">
-          <div class="timer-card">
-            <output id="stopwatchDisplay" class="stopwatch-display" aria-live="polite">00:00:00</output>
-            <div class="timer-controls" aria-label="Управление секундомером">
-              <button id="startPauseBtn" class="control primary" type="button">Старт</button>
-              <button id="resetBtn" class="control" type="button">Сброс</button>
-            </div>
-            <label class="auto-toggle">
-              <input id="autoComplete" type="checkbox" checked />
-              <span>Автоотметка по времени</span>
-            </label>
+          <div class="timer-controls" aria-label="Управление секундомером">
+            <button id="startPauseBtn" class="control primary" type="button">
+              Старт
+            </button>
+            <button id="resetBtn" class="control secondary" type="button">
+              Сброс
+            </button>
           </div>
-        </div>
-        <div class="cell grid-cell"></div>
 
-        <div class="row-head">3</div>
-        <div class="cell table-cell status-cell" data-task-row="1"></div>
-        <div class="cell table-cell time-cell" data-minutes="20">20</div>
-        <div class="cell table-cell group-cell group-20"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
+          <label class="auto-toggle glass-toggle">
+            <input id="autoComplete" type="checkbox" checked />
+            <span class="toggle-visual" aria-hidden="true"></span>
+            <span>
+              <strong>Автоотметка</strong>
+              <small
+                >Ставит галочку, когда секундомер дошёл до времени строки</small
+              >
+            </span>
+          </label>
+        </header>
 
-        <div class="row-head">4</div>
-        <div class="cell table-cell status-cell" data-task-row="2"></div>
-        <div class="cell table-cell time-cell" data-minutes="40">40</div>
-        <div class="cell table-cell group-cell group-30" rowspan-like="true">30</div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
+        <section class="tasks-card glass-card" aria-labelledby="tasksTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Список</p>
+              <h2 id="tasksTitle">Контроль времени</h2>
+            </div>
+            <span id="completedCounter" class="counter">0/11</span>
+          </div>
 
-        <div class="row-head">5</div>
-        <div class="cell table-cell status-cell" data-task-row="3"></div>
-        <div class="cell table-cell time-cell" data-minutes="50">50</div>
-        <div class="cell table-cell group-cell group-30"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
+          <div class="table-head" aria-hidden="true">
+            <span>Статус</span>
+            <span>Время, мин</span>
+          </div>
 
-        <div class="row-head">6</div>
-        <div class="cell table-cell status-cell" data-task-row="4"></div>
-        <div class="cell table-cell time-cell" data-minutes="60">60</div>
-        <div class="cell table-cell group-cell group-30"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-
-        <div class="row-head">7</div>
-        <div class="cell table-cell status-cell" data-task-row="5"></div>
-        <div class="cell table-cell time-cell" data-minutes="90">90</div>
-        <div class="cell table-cell group-cell group-30"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-
-        <div class="row-head">8</div>
-        <div class="cell table-cell status-cell" data-task-row="6"></div>
-        <div class="cell table-cell time-cell" data-minutes="120">120</div>
-        <div class="cell table-cell group-cell group-40" rowspan-like="true">40</div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-
-        <div class="row-head">9</div>
-        <div class="cell table-cell status-cell" data-task-row="7"></div>
-        <div class="cell table-cell time-cell" data-minutes="150">150</div>
-        <div class="cell table-cell group-cell group-40"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-
-        <div class="row-head">10</div>
-        <div class="cell table-cell status-cell" data-task-row="8"></div>
-        <div class="cell table-cell time-cell" data-minutes="200">200</div>
-        <div class="cell table-cell group-cell group-40"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-
-        <div class="row-head">11</div>
-        <div class="cell table-cell status-cell" data-task-row="9"></div>
-        <div class="cell table-cell time-cell" data-minutes="220">220</div>
-        <div class="cell table-cell group-cell group-60" rowspan-like="true">60</div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-
-        <div class="row-head">12</div>
-        <div class="cell table-cell status-cell" data-task-row="10"></div>
-        <div class="cell table-cell time-cell" data-minutes="240">240</div>
-        <div class="cell table-cell group-cell group-60"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
-        <div class="cell grid-cell"></div>
+          <div
+            id="taskList"
+            class="task-list"
+            aria-label="Задачи с порогами времени"
+          ></div>
+        </section>
       </section>
     </main>
 
